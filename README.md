@@ -1,36 +1,125 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛸 經典復古小蜜蜂遊戲 APP (Galaga Space Shooter)
 
-## Getting Started
+歡迎來到**經典復古小蜜蜂遊戲 APP**！這是一個基於 **Next.js** 與 **TypeScript** 開發的網頁版太空射擊遊戲。專案融合了 80 年代街機的經典元素，搭配現代化的網頁視覺效果（Neon Glow 霓虹發光主題）與流暢的遊戲體驗，並實作了高分排行榜的檔案儲存機制。
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🌟 遊戲特色
+
+1. **HTML5 Canvas 遊戲引擎**：
+   - 採用高效能繪圖引擎，提供穩定 **60 FPS** 的流暢射擊與移動體驗。
+   - 動態雙層星空背景（Parallax Stars），模擬飛船在宇宙中穿梭的視覺深度。
+
+2. **Web Audio API 原生音效合成**：
+   - 無需下載或載入任何音訊 MP3 檔案，完全利用瀏覽器內建的 Web Audio API 即時合成復古 8 類比音訊！
+   - 包含**發射雷射**、**敵機受傷**、**敵機爆炸**、**玩家戰機被毀**等經典街機音效。
+
+3. **智慧敵人波段（Enemy Waves）**：
+   - **三種階級敵人**：分為黃金戰機（Gold）、青藍戰機（Cyan）與赤紅戰機（Red），各自擁有不同的分數值。
+   - **動態戰術**：敵人會左右搖擺前進、發射子彈反擊，甚至會突然**俯衝突襲**玩家！
+
+4. **完善的控制系統**：
+   - **鍵盤控制**：
+     - `A` 或 `← (左方向鍵)`：向左移動
+     - `D` 或 `→ (右方向鍵)`：向右移動
+     - `Space (空白鍵)`：發射雷射子彈
+   - **行動裝置友善**：螢幕下方配有專屬的**觸控控制面板**（左移、右移、發射），讓你在手機與平板上也能暢快遊玩！
+
+5. **持久化高分排行榜 (Leaderboard)**：
+   - 遊戲結束後，玩家可以輸入自己的暱稱與分數（系統會預填當局得分，並保留手動調整空間）。
+   - 資料透過 API 連接，並保存在專案根目錄的 `data/scores.json` 檔案中。**重啟伺服器或電腦資料也不會消失**！
+   - 排行榜會依據分數從高到低自動排序。
+
+---
+
+## 📁 專案關鍵目錄與檔案
+
+```text
+week06/
+├── app/
+│   ├── api/
+│   │   └── scores/
+│   │       └── route.ts      # 排行榜 REST API (GET / POST)
+│   ├── globals.css           # 復古霓虹燈主題樣式與動畫 (CSS Variables)
+│   ├── layout.tsx            # 全域 HTML 佈局與 SEO 設定
+│   └── page.tsx              # 小蜜蜂遊戲主要渲染與 Canvas 邏輯檔
+├── data/
+│   └── scores.json           # 本地排行榜資料庫 (JSON 格式)
+├── public/                   # 靜態資源目錄
+├── .gitignore                # Git 排除檔案配置 (已優化 Windows & IDE 暫存)
+├── README.md                 # 本操作中文手冊
+└── package.json              # 專案套件配置與啟動腳本
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚀 快速開始指南
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+在本地端運行此專案非常簡單，請按照以下步驟操作：
 
-## Learn More
+### 1. 安裝套件依賴
+在專案根目錄打開終端機，執行以下指令安裝所需套件：
+```bash
+npm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 2. 啟動開發伺服器
+執行以下指令啟動 Next.js 本地開發環境：
+```bash
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 3. 開始遊玩！
+打開瀏覽器，造訪以下網址即可開始遊玩：
+* 本地遊玩網址：[http://localhost:3000](http://localhost:3000)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 💾 排行榜 API 說明 (REST API)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+本專案提供一組簡易的 API 來存取排行榜數據：
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* **取得排行榜資料 (GET)**
+  - **路徑**：`/api/scores`
+  - **功能**：讀取 `data/scores.json` 檔案，將所有紀錄依分數由高到低排序後以 JSON 陣列回傳。
+
+* **新增高分紀錄 (POST)**
+  - **路徑**：`/api/scores`
+  - **請求格式**：
+    ```json
+    {
+      "name": "玩家暱稱",
+      "score": 5000
+    }
+    ```
+  - **功能**：驗證玩家名稱與分數後，寫入 `data/scores.json`，並自動限制最大儲存紀錄數（100 筆），最後回傳更新後的排行榜。
+
+---
+
+## 🔧 Git 版本控制與雲端備份
+
+本專案已完整設定 Git 倉庫，並排除了系統垃圾檔案，且已上傳至 GitHub。
+
+### 常用 Git 操作命令
+
+若你在本地對遊戲做了任何修改，可以透過以下命令同步至你的 GitHub 倉庫：
+
+1. **查看變更狀態**：
+   ```bash
+   git status
+   ```
+2. **將所有變更加入暫存區**：
+   ```bash
+   git add .
+   ```
+3. **提交變更**：
+   ```bash
+   git commit -m "feat: 你的修改描述"
+   ```
+4. **推送到 GitHub**：
+   ```bash
+   git push
+   ```
+
+---
+💡 **教練的話**：這個小蜜蜂專案結合了前端網頁動畫、音效合成以及後端 API 檔案讀寫，是一個非常完整且高規格的 Next.js 練習作品。恭喜你完成它，繼續加油前進！🚀
